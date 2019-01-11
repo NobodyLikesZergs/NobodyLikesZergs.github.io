@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - teapot buffer geometry</title>
+		<title>webgl</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -30,12 +30,8 @@
 		</style>
 	</head>
 	<body>
-		<div id="info">
-			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - the Utah Teapot<br />
-			from <a href="https://www.udacity.com/course/interactive-3d-graphics--cs291" target="_blank" rel="noopener">Udacity Interactive 3D Graphics</a>
-		</div>
 
-		<script src="../build/three.js"></script>
+		<script src="build/three.js"></script>
 
 		<script src="js/controls/OrbitControls.js"></script>
 
@@ -46,11 +42,6 @@
 		<script src='js/geometries/TeapotBufferGeometry.js'></script>
 
 		<script>
-
-			////////////////////////////////////////////////////////////////////////////////
-			// Utah/Newell Teapot demo
-			////////////////////////////////////////////////////////////////////////////////
-			/*global THREE, WEBGL, dat, window */
 
 			if ( WEBGL.isWebGLAvailable() === false ) {
 
