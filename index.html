@@ -97,7 +97,7 @@
 						if ( child.isMesh ) child.material.map = texture;
 
 					} );
-
+					object.material.color.setHex(0xff0000)
 					object.position.y = - 95;
 					scene.add( object );
 
@@ -136,7 +136,6 @@
 
 				// loader.load( 'models/obj/male02/male02.obj', function ( obj ) {
 				loader.load( 'res.obj', function ( obj ) {
-					obj.material.color.setHex(0xff0000)
 					object = obj;
 			
 				}, onProgress, onError );
