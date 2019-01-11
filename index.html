@@ -30,7 +30,7 @@
 		<script src="build/three.js"></script>
 		<script src="js/loaders/OBJLoader.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
-		
+
 		<script>
 
 			var container;
@@ -53,12 +53,27 @@
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
-				
-				renderer = new THREE.WebGLRenderer();
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
 
+				var canvasWidth = window.innerWidth;
+				var canvasHeight = window.innerHeight;
+
+				// CAMERA
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 80000 );
+				camera.position.set( - 600, 550, 1300 );
+
+
+				// RENDERER
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( canvasWidth, canvasHeight );
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+				container.appendChild( renderer.domElement );
+				
+				// EVENTS
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+				// CONTROLS
 				cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
 				cameraControls.addEventListener( 'change', render );
 
