@@ -38,6 +38,7 @@
 
 	<script src="build/three.js"></script>
 	<script src="js/loaders/OBJLoader.js"></script>
+	<script src="js/libs/dat.gui.min.js"></script>
 	<script src="js/controls/OrbitControls.js"></script>
 
 	<script>
@@ -48,6 +49,8 @@
 
 		var mouseX = 0, mouseY = 0;
 		var mouse = new THREE.Vector2(), INTERSECTED;
+
+		var gui = new dat.GUI();
 
 		var windowHalfX = window.innerWidth / 2;
 		var windowHalfY = window.innerHeight / 2;
@@ -159,7 +162,7 @@
 				object.traverse(function (child) {
 
 					if (child.isMesh)
-						child.material = new THREE.MeshPhongMaterial({ color: 0xff0000, specular: 0xff0000, shininess: 5, shading: THREE.SmoothShading });
+						child.material = new THREE.MeshPhongMaterial({ color: 0xff0000, specular: 0xff0000, shininess: 5, flatShading: THREE.SmoothShading });
 
 				});
 				scene.add(object)
@@ -171,7 +174,7 @@
 			var callbackOnLoad = function (obj) {
 				obj.traverse(function (child) {
 					if (child.isMesh)
-						child.material = new THREE.MeshPhongMaterial({ color: 0xff00ff, specular: 0xff00ff, shininess: 5,depthTest: true, depthWrite: false, shading: THREE.SmoothShading, transparent: true, opacity: 0 });
+						child.material = new THREE.MeshPhongMaterial({ color: 0xff00ff, specular: 0xff00ff, shininess: 5,depthTest: true, depthWrite: false, flatShading: THREE.SmoothShading, transparent: true, opacity: 0 });
 				});
 				i++
 				objs.push(obj)
@@ -213,6 +216,30 @@
 
 			window.addEventListener('resize', onWindowResize, false);
 
+
+			// var folder = gui.addFolder( 'Coords' );
+
+		}
+
+		function setGui(xval, yval, zval) {
+			gui.destroy()
+			gui = new dat.GUI();
+			var params = {
+					x: xval,
+					y: yval,
+					z: zval
+				};
+			var xc = gui.add( params, 'x', -1000, 1000 )
+			xc.domElement.style.pointerEvents = "none"
+			xc.domElement.style.opacity = 0.5;
+
+			var yc = gui.add( params, 'y', -1000, 1000 )
+			yc.domElement.style.pointerEvents = "none"
+			yc.domElement.style.opacity = 0.5;
+
+			var zc = gui.add( params, 'z', -1000, 1000 )
+			zc.domElement.style.pointerEvents = "none"
+			zc.domElement.style.opacity = 0.5;
 		}
 
 		function onWindowResize() {
@@ -260,7 +287,8 @@
 
 			var intersects = raycaster.intersectObjects(scene.children, true);
 			if (intersects.length > 0) {
-				if (INTERSECTED != intersects[0].object && intersects[0].object != object) {
+				// if (INTERSECTED != intersects[0].object && intersects[0].object != object) {
+				if (INTERSECTED != intersects[0].object ) {
 					if (INTERSECTED) {
 						INTERSECTED.material.opacity = 0;
 						INTERSECTED.renderOrder = 1;
@@ -268,6 +296,18 @@
 					INTERSECTED = intersects[0].object;
 					INTERSECTED.material.opacity = 1;
 					INTERSECTED.renderOrder = 100000;
+
+					scene.updateMatrixWorld(true);
+
+					INTERSECTED.geometry.computeBoundingBox();
+					var boundingBox = INTERSECTED.geometry.boundingBox;
+					var position = new THREE.Vector3();
+					position.subVectors( boundingBox.max, boundingBox.min );
+					position.multiplyScalar( 0.5 );
+					position.add( boundingBox.min );
+					position.applyMatrix4( INTERSECTED.matrixWorld );
+					
+					setGui(position.x, position.y, position.z)
 					// INTERSECTED.onBeforeRender = function (renderer) { renderer.clearDepth(); };
 					// object.renderOrder = 9999;
 					// object.onBeforeRender = function (renderer) { renderer.clearDepth(); };
