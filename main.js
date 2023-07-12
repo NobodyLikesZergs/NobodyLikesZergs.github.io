@@ -138,7 +138,7 @@ class Block {
 		element.className = this.classes.button;
 		element.innerText = 'играть';
 		element.onclick = () => {
-			window.open(url);
+			window.open(url, "_self");
 		};
 
 		return element;
